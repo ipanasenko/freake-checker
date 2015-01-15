@@ -1,0 +1,101 @@
+body {
+	padding: 20px;
+	min-width: 350px;
+}
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-size: 100%;
+}
+.music-small {
+	float: left;
+	width: 350px;
+	font-size: 11px;
+	margin-bottom: 15px;
+	font-family: tahoma, arial, verdana, sans-serif, 'Lucida Sans';
+}
+.music-small .ms-image {
+	float: left;
+	width: 80px;
+	position: relative;
+}
+.music-small .ms-image img {
+	display: block;
+	width: 100%;
+	vertical-align: top;
+}
+.music-small .ms-info {
+	float: right;
+	width: 250px;
+	margin: 0 10px;
+}
+.music-small .ms-info h3 {
+	margin-bottom: 6px;
+	font-size: 12px;
+}
+.music-small .ms-info table td {
+	padding-bottom: 5px;
+	line-height: 100%;
+	vertical-align: top;
+}
+.music-small .ms-info table td.type {
+	width: 80px;
+	color: #888;
+}
+.music-small .ms-style {
+	margin-bottom: 8px;
+}
+.music-small .ms-rate {
+	margin-bottom: 8px;
+}
+.rate-small {
+	height: 16px;
+	line-height: 16px;
+}
+.rate-small .show,
+.rate-small .current {
+	background-image: url("http://freake.ru/template/images/star24.png");
+	background-repeat: repeat-x;
+	background-size: 16px auto;
+}
+.rate-small .show {
+	width: 80px;
+	height: 16px;
+	float: left;
+	position: relative;
+	background-position: top left;
+}
+.rate-small .current {
+	display: block;
+	background-position: bottom left;
+	width: 0;
+	height: 16px;
+	z-index: 1;
+	position: absolute;
+	overflow: hidden
+}
+.rate-small .info span {
+	margin-left: 10px;
+	font-size: 10px;
+	color: #999;
+}
+.elps {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+.cptz {
+	text-transform: capitalize;
+}
+a {
+	color: #06b;
+	cursor: pointer;
+	text-decoration: none;
+}
