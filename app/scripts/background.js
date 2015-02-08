@@ -97,6 +97,7 @@ var loadAndParsePage = function (pageUrl) {
         if (nextPage) {
             loadAndParsePage(freakefy(nextPage));
         } else {
+            console.log('exposedSettings.releases', exposedSettings.releases);
             saveSettings();
         }
     });
