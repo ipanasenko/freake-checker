@@ -45,7 +45,7 @@ var setReleaseAsViewed = function (id, doSave) {
 };
 
 chrome.storage.sync.get(['releases', 'styles'], function (settings) {
-    jQuery.extend({
+    settings = jQuery.extend({
         releases: {},
         styles: []
     }, settings);
