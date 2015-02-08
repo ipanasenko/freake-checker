@@ -1,7 +1,5 @@
 'use strict';
 
-console.log('\'Allo \'Allo! Popup');
-
 var bg = chrome.extension.getBackgroundPage();
 var settings = bg.exposedSettings,
 	freake = bg.freake;
@@ -18,8 +16,6 @@ var insertDataInTemplate = (function () {
 		return template;
 	};
 }());
-
-console.log(settings.releases);
 
 var template = '\
 	<div class="music-small clearfix" data-release-id="#id#">\
@@ -89,11 +85,8 @@ var loadReleases = function () {
 				musicData.rating = data.find('#rate-r-' + releaseId).text() / 5 * 80;
 				musicData.styles = data.find('td.type:contains("Style")').next().text();
 				musicData.released = data.find('td.type:contains("Released")').next().text();
-				//				musicData.comments = data.find('td.type:contains("Comments")').next().text();
-				//				musicData.type = data.find('td.type:contains("Type")').next().text();
 				musicData.actualInfo = true;
 
-				console.log(musicData);
 				settings.releases[releaseId] = musicData;
 
 				music.replaceWith(insertDataInTemplate(template, musicData));

@@ -77,15 +77,6 @@ module.exports = function (grunt) {
                         '<%= config.app %>'
                     ]
                 }
-            },
-            test: {
-                options: {
-                    open: false,
-                    base: [
-                        'test',
-                        '<%= config.app %>'
-                    ]
-                }
             }
         },
 
@@ -113,8 +104,7 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 '<%= config.app %>/scripts/{,*/}*.js',
-                '!<%= config.app %>/scripts/vendor/*',
-                'test/spec/{,*/}*.js'
+                '!<%= config.app %>/scripts/vendor/*'
             ]
         },
         mocha: {
@@ -254,8 +244,6 @@ module.exports = function (grunt) {
             dist: [
                 //'imagemin',
                 //'svgmin'
-            ],
-            test: [
             ]
         },
 
@@ -304,11 +292,6 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('test', [
-        'connect:test',
-        'mocha'
-    ]);
-
     grunt.registerTask('build', [
         'clean:dist',
         'chromeManifest:dist',
@@ -324,7 +307,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         //'jshint',
-        'test',
         'build'
     ]);
 };
