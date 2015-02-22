@@ -230,7 +230,8 @@ module.exports = function (grunt) {
                         '{,*/}*.html',
                         'styles/{,*/}*.css',
                         'styles/fonts/{,*/}*.*',
-                        '_locales/{,*/}*.json'
+                        '_locales/{,*/}*.json',
+                        'scripts/*.js'
                     ]
                 }]
             }
@@ -243,23 +244,6 @@ module.exports = function (grunt) {
                 //'imagemin',
                 //'svgmin'
             ]
-        },
-
-        // Auto buildnumber, exclude debug files. smart builds that event pages
-        chromeManifest: {
-            dist: {
-                options: {
-                    buildnumber: false,
-                    background: {
-                        target: 'scripts/background.js',
-                        exclude: [
-                            'scripts/chromereload.js'
-                        ]
-                    }
-                },
-                src: '<%= config.app %>',
-                dest: '<%= config.dist %>'
-            }
         },
 
         bump: {
@@ -301,15 +285,14 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        'chromeManifest:dist',
         'useminPrepare',
         'concurrent:dist',
         'cssmin',
         'concat',
-        'uglify',
+        //'uglify',
         'copy',
-        'usemin',
-        'compress'
+        'usemin'
+        //'compress'
     ]);
 
     grunt.registerTask('release', 'Bump version, update changelog and tag version', function (version) {
