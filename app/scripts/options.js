@@ -1,18 +1,16 @@
-function saveOptions(styles) {
-    chrome.storage.sync.set({
-        styles: styles
-    }, function () {
+function saveSettings(settings) {
+    chrome.storage.sync.set(settings, function () {
         jQuery('#status').html('Saved');
     });
 }
 
-function restoreOptions() {
-    chrome.storage.sync.get({
-        styles: []
-    }, function (items) {
-        items.styles.forEach(function (style) {
+function restoreSettings() {
+    chrome.storage.sync.get(defaultSettings, function (settings) {
+        settings.styles.forEach(function (style) {
             jQuery('input[value="' + style + '"]').click();
         });
+
+        jQuery('#minVotes').val(settings.minVotes);
     });
 }
 
@@ -32,12 +30,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 return +this.value;
             });
             selectedStyles = Array.prototype.slice.call(selectedStyles);
-            saveOptions(selectedStyles);
+
+            var minVotes = +jQuery('#minVotes').val();
+
+            saveSettings({
+                styles: selectedStyles,
+                minVotes: minVotes
+            });
         });
 
         jQuery('#styles').append(form, saveButton);
 
-        restoreOptions();
+        restoreSettings();
 
         jQuery('.multiselect').multiselect({
             noneSelectedText: 'All genres'

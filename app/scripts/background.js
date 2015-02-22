@@ -6,7 +6,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
 var exposedSettings = {};
 
-var MIN_VOTES = 20;
 var freake = 'http://freake.ru';
 var freakefy = function (s) {
     return freake + s;
@@ -44,11 +43,7 @@ var setReleaseAsViewed = function (id, doSave) {
     doSave && saveSettings();
 };
 
-chrome.storage.sync.get(['releases', 'styles'], function (settings) {
-    settings = jQuery.extend({
-        releases: {},
-        styles: []
-    }, settings);
+chrome.storage.sync.get(defaultSettings, function (settings) {
     settingsLoader.resolve(settings);
 });
 
@@ -72,7 +67,7 @@ var loadAndParsePage = function (pageUrl) {
 
             var votes = +music.find('.ms-rate .info').text().replace(/\D/g, '');
 
-            if (votes < MIN_VOTES) {
+            if (votes < exposedSettings.minVotes) {
                 return;
             }
 
