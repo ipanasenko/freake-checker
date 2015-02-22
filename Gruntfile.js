@@ -82,8 +82,7 @@ module.exports = function (grunt) {
 
         // Empties folders to start fresh
         clean: {
-            chrome: {
-            },
+            chrome: {},
             dist: {
                 files: [{
                     dot: true,
@@ -239,8 +238,7 @@ module.exports = function (grunt) {
 
         // Run some tasks in parallel to speed up build process
         concurrent: {
-            chrome: [
-            ],
+            chrome: [],
             dist: [
                 //'imagemin',
                 //'svgmin'
@@ -251,7 +249,7 @@ module.exports = function (grunt) {
         chromeManifest: {
             dist: {
                 options: {
-                    buildnumber: true,
+                    buildnumber: false,
                     background: {
                         target: 'scripts/background.js',
                         exclude: [
@@ -264,11 +262,20 @@ module.exports = function (grunt) {
             }
         },
 
+        bump: {
+            options: {
+                files: ['app/manifest.json'],
+                commitFiles: ['.'],
+                commitMessage: 'chore: release v%VERSION%',
+                push: false
+            }
+        },
+
         // Compres dist files to package
         compress: {
             dist: {
                 options: {
-                    archive: function() {
+                    archive: function () {
                         var manifest = grunt.file.readJSON('app/manifest.json');
                         return 'package/freake checker-' + manifest.version + '.zip';
                     }
@@ -304,6 +311,14 @@ module.exports = function (grunt) {
         'usemin',
         'compress'
     ]);
+
+    grunt.registerTask('release', 'Bump version, update changelog and tag version', function (version) {
+        grunt.task.run([
+            'bump:' + (version || 'patch') + ':bump-only',
+            'build',
+            'bump-commit'
+        ]);
+    });
 
     grunt.registerTask('default', [
         //'jshint',
