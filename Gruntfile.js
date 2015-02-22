@@ -291,8 +291,8 @@ module.exports = function (grunt) {
         'concat',
         //'uglify',
         'copy',
-        'usemin'
-        //'compress'
+        'usemin',
+        'compress'
     ]);
 
     grunt.registerTask('release', 'Bump version, update changelog and tag version', function (version) {
