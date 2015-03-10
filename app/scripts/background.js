@@ -19,7 +19,7 @@ settingsLoader.done(function (settings) {
 });
 
 var saveSettings = function () {
-    chrome.storage.sync.set(exposedSettings, function () {
+    chrome.storage.local.set(exposedSettings, function () {
         console.log('saved');
     });
 
@@ -43,7 +43,7 @@ var setReleaseAsViewed = function (id, doSave) {
     doSave && saveSettings();
 };
 
-chrome.storage.sync.get(defaultSettings, function (settings) {
+chrome.storage.local.get(defaultSettings, function (settings) {
     settingsLoader.resolve(settings);
 });
 
