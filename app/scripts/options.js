@@ -1,11 +1,11 @@
 function saveSettings(settings) {
-    chrome.storage.local.set(settings, function () {
+    chrome.storage.sync.set(settings, function () {
         jQuery('#status').html('Saved');
     });
 }
 
 function restoreSettings() {
-    chrome.storage.local.get(defaultSettings, function (settings) {
+    chrome.storage.sync.get(defaultSettings, function (settings) {
         settings.styles.forEach(function (style) {
             jQuery('input[value="' + style + '"]').click();
         });

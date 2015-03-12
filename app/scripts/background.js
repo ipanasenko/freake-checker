@@ -18,8 +18,21 @@ settingsLoader.done(function (settings) {
     exposedSettings = settings;
 });
 
-var saveSettings = function () {
-    chrome.storage.local.set(exposedSettings, function () {
+var saveSettings = function (releasesFromThisParse) {
+    // remove not needed ids from settings, to free some space
+    console.log('releasesFromThisParse', releasesFromThisParse);
+    if (releasesFromThisParse) {
+        console.log(exposedSettings.releases);
+        Object.keys(exposedSettings.releases).forEach(function (releaseId) {
+            if (releasesFromThisParse.indexOf(+releaseId) === -1) {
+                console.log('delete', releaseId);
+                delete exposedSettings.releases[releaseId];
+            }
+        });
+        console.log(exposedSettings.releases);
+    }
+
+    chrome.storage.sync.set(exposedSettings, function () {
         console.log('saved');
     });
 
@@ -43,11 +56,11 @@ var setReleaseAsViewed = function (id, doSave) {
     doSave && saveSettings();
 };
 
-chrome.storage.local.get(defaultSettings, function (settings) {
+chrome.storage.sync.get(defaultSettings, function (settings) {
     settingsLoader.resolve(settings);
 });
 
-var loadAndParsePage = function (pageUrl) {
+var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
     jQuery.each(exposedSettings.releases || {}, function (releaseId, releaseData) {
         releaseData.actualInfo = false;
     });
@@ -60,6 +73,7 @@ var loadAndParsePage = function (pageUrl) {
             var music = jQuery(this),
                 releaseId = +music.find('.elps a').attr('href').slice(1);
 
+            releasesFromThisParse.push(releaseId);
 
             if (exposedSettings.releases[releaseId] && exposedSettings.releases[releaseId].viewed === true) {
                 return;
@@ -90,10 +104,9 @@ var loadAndParsePage = function (pageUrl) {
 
         var nextPage = data.find('.pagination-this').next().find('a').attr('href');
         if (nextPage) {
-            loadAndParsePage(freakefy(nextPage));
+            loadAndParsePage(freakefy(nextPage), releasesFromThisParse);
         } else {
-            console.log('exposedSettings.releases', exposedSettings.releases);
-            saveSettings();
+            saveSettings(releasesFromThisParse);
         }
     });
 };
@@ -101,7 +114,7 @@ var initParse = function () {
     var styles = exposedSettings.styles.map(function (style) {
         return 'sid%5B%5D=' + style;
     }).join('&');
-    loadAndParsePage(freakefy('/music/filter?' + styles + '&int=d%2C3&s=rate&o=desc'));
+    loadAndParsePage(freakefy('/music/filter?' + styles + '&int=d%2C3&s=rate&o=desc'), []);
 };
 settingsLoader.done(function () {
     initParse();
