@@ -2,19 +2,19 @@
 
 var bg = chrome.extension.getBackgroundPage();
 var settings = bg.exposedSettings,
-    freake   = bg.freake;
+  freake = bg.freake;
 
 var insertDataInTemplate = (function () {
-    var createRegexp = function (t, options) {
-        t = t.replace(/[()\[\]\.^$|?+]/g, '\\$&');
-        return new RegExp(t, options);
-    };
-    return function (template, data) {
-        jQuery.each(data, function (key, value) {
-            template = template.replace(createRegexp('#' + key + '#', 'gi'), value);
-        });
-        return template;
-    };
+  var createRegexp = function (t, options) {
+    t = t.replace(/[()\[\]\.^$|?+]/g, '\\$&');
+    return new RegExp(t, options);
+  };
+  return function (template, data) {
+    jQuery.each(data, function (key, value) {
+      template = template.replace(createRegexp('#' + key + '#', 'gi'), value);
+    });
+    return template;
+  };
 }());
 
 var template = '\
@@ -40,110 +40,110 @@ var template = '\
 
 var musicContainer = jQuery('#music-container');
 var loadReleases = function () {
-    musicContainer.empty();
+  musicContainer.empty();
 
-    var sorted = [];
-    console.log('releases', settings.releases);
-    jQuery.each(settings.releases, function () {
-        if (this.viewed) {
-            return;
-        }
+  var sorted = [];
+  console.log('releases', settings.releases);
+  jQuery.each(settings.releases, function () {
+    if (this.viewed) {
+      return;
+    }
 
-        sorted.push(this);
-    });
-    console.log(sorted);
-    sorted = sorted.sort(function (a, b) {
-        return parseFloat(b.votes) - parseFloat(a.votes);
-    });
+    sorted.push(this);
+  });
+  console.log(sorted);
+  sorted = sorted.sort(function (a, b) {
+    return parseFloat(b.votes) - parseFloat(a.votes);
+  });
 
-    var ajaxes = [];
+  var ajaxes = [];
 
-    jQuery.each(sorted.slice(0, 10), function (i, releaseData) {
-        var music;
-        if (releaseData.actualInfo === true) {
-            music = jQuery(insertDataInTemplate(template, releaseData));
-        } else {
-            releaseData.actualInfo = true;
+  jQuery.each(sorted.slice(0, 10), function (i, releaseData) {
+    var music;
+    if (releaseData.actualInfo === true) {
+      music = jQuery(insertDataInTemplate(template, releaseData));
+    } else {
+      releaseData.actualInfo = true;
 
-            music = jQuery('<div class="music-small clearfix">Loading release info...</div>');
+      music = jQuery('<div class="music-small clearfix">Loading release info...</div>');
 
-            var releaseId = releaseData.id;
+      var releaseId = releaseData.id;
 
-            var href = bg.freakefy('/' + releaseId);
-            var ajax = jQuery.get(href, function (data) {
-                data = jQuery(data);
+      var href = bg.freakefy('/' + releaseId);
+      var ajax = jQuery.get(href, function (data) {
+        data = jQuery(data);
 
-                var coverImg = data.find('.blc-image img');
+        var coverImg = data.find('.blc-image img');
 
-                var musicData = {};
+        var musicData = {};
 
-                musicData.id = releaseId;
-                musicData.cover = coverImg.attr('src');
-                musicData.title = coverImg.attr('alt');
-                musicData.performerAndTitle = data.find('.post-title h1').text();
-                musicData.votes = data.find('#rate-v-' + releaseId).text();
-                musicData.rating = data.find('#rate-r-' + releaseId).text() / 5 * 80;
-                musicData.styles = data.find('td.type:contains("Style")').next().text();
-                musicData.released = data.find('td.type:contains("Released")').next().text();
-                musicData.actualInfo = true;
+        musicData.id = releaseId;
+        musicData.cover = coverImg.attr('src');
+        musicData.title = coverImg.attr('alt');
+        musicData.performerAndTitle = data.find('.post-title h1').text();
+        musicData.votes = data.find('#rate-v-' + releaseId).text();
+        musicData.rating = data.find('#rate-r-' + releaseId).text() / 5 * 80;
+        musicData.styles = data.find('td.type:contains("Style")').next().text();
+        musicData.released = data.find('td.type:contains("Released")').next().text();
+        musicData.actualInfo = true;
 
-                settings.releases[releaseId] = musicData;
+        settings.releases[releaseId] = musicData;
 
-                music.replaceWith(insertDataInTemplate(template, musicData));
-            });
+        music.replaceWith(insertDataInTemplate(template, musicData));
+      });
 
-            ajaxes.push(ajax);
-        }
+      ajaxes.push(ajax);
+    }
 
-        musicContainer.append(music);
-    });
+    musicContainer.append(music);
+  });
 
-    jQuery.when.apply(jQuery, ajaxes).then(function () {
-        bg.saveSettings();
-    });
+  jQuery.when.apply(jQuery, ajaxes).then(function () {
+    bg.saveSettings();
+  });
 };
 
 loadReleases();
 
 jQuery(document).on('click', '.music-small a', function () {
-    //	var musicWrapper = jQuery(this).closest('.music-small');
-    //	var id = musicWrapper.data('release-id');
+  //	var musicWrapper = jQuery(this).closest('.music-small');
+  //	var id = musicWrapper.data('release-id');
 
-    //	bg.setReleaseAsViewed(id, true);
+  //	bg.setReleaseAsViewed(id, true);
 
-    chrome.tabs.create({
-        url: this.href
-    });
+  chrome.tabs.create({
+    url: this.href
+  });
 
-    //	musicWrapper.remove();
+  //	musicWrapper.remove();
 }).on('click', '.music-small button', function () {
-    var musicWrapper = jQuery(this).closest('.music-small');
-    var id = musicWrapper.data('release-id');
+  var musicWrapper = jQuery(this).closest('.music-small');
+  var id = musicWrapper.data('release-id');
 
-    bg.setReleaseAsViewed(id, true);
-    musicWrapper.remove();
+  bg.setReleaseAsViewed(id, true);
+  musicWrapper.remove();
 }).on('click', '#markAll', function () {
-    jQuery('.music-small').each(function () {
-        var id = jQuery(this).data('release-id');
+  jQuery('.music-small').each(function () {
+    var id = jQuery(this).data('release-id');
 
-        bg.setReleaseAsViewed(id, false);
-    });
-    bg.saveSettings();
-    loadReleases();
+    bg.setReleaseAsViewed(id, false);
+  });
+  bg.saveSettings();
+  loadReleases();
 }).on('click', '#openAll', function () {
-    jQuery('.music-small').each(function (i) {
-        var id = jQuery(this).data('release-id'),
-            url = jQuery(this).find('a').attr('href');
+  jQuery('.music-small').each(function (i) {
+    var id = jQuery(this).data('release-id'),
+      url = jQuery(this).find('a').attr('href');
 
-        setTimeout(function () {
-            chrome.tabs.create({
-                url: url
-            });
-        }, i);
+    setTimeout(function () {
+      chrome.tabs.create({
+        url: url
+      });
+    }, i);
 
-        bg.setReleaseAsViewed(id, false);
-    });
+    bg.setReleaseAsViewed(id, false);
+  });
 
-    bg.saveSettings();
-    loadReleases();
+  bg.saveSettings();
+  loadReleases();
 });

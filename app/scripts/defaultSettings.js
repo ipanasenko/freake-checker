@@ -1,9 +1,9 @@
 var freake = 'http://freake.ru';
 var freakefy = function (s) {
-    return freake + s;
+  return freake + s;
 };
 var defaultSettings = {
-    releases: {},
-    styles: [],
-    minVotes: 20
+  releases: {},
+  styles: [],
+  minVotes: 20
 };
