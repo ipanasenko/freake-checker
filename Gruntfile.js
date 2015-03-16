@@ -249,7 +249,7 @@ module.exports = function (grunt) {
 
         bump: {
             options: {
-                files: ['app/manifest.json'],
+                files: ['app/manifest.json', 'package.json', 'bower.json'],
                 commitFiles: ['.'],
                 commitMessage: 'chore: release v%VERSION%',
                 push: false
