@@ -6,18 +6,6 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
 var exposedSettings = {};
 
-var freake = 'http://freake.ru';
-var freakefy = function (s) {
-    return freake + s;
-};
-
-var settingsLoader = jQuery.Deferred();
-
-settingsLoader.done(function (settings) {
-    console.log('settings loaded:', settings);
-    exposedSettings = settings;
-});
-
 var saveSettings = function (releasesFromThisParse) {
     // remove not needed ids from settings, to free some space
     console.log('releasesFromThisParse', releasesFromThisParse);
@@ -56,9 +44,19 @@ var setReleaseAsViewed = function (id, doSave) {
     doSave && saveSettings();
 };
 
-chrome.storage.sync.get(defaultSettings, function (settings) {
-    settingsLoader.resolve(settings);
-});
+var loadSettings = function () {
+    var settingsLoader = jQuery.Deferred();
+
+    settingsLoader.done(function (settings) {
+        console.log('settings loaded:', settings);
+        exposedSettings = settings;
+    });
+
+    chrome.storage.sync.get(defaultSettings, function (settings) {
+        settingsLoader.resolve(settings);
+    });
+    return settingsLoader.promise();
+};
 
 var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
     jQuery.each(exposedSettings.releases || {}, function (releaseId, releaseData) {
@@ -111,23 +109,23 @@ var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
     });
 };
 var initParse = function () {
-    var styles = exposedSettings.styles.map(function (style) {
-        return 'sid%5B%5D=' + style;
-    }).join('&');
-    loadAndParsePage(freakefy('/music/filter?' + styles + '&int=d%2C3&s=rate&o=desc'), []);
+    loadSettings().done(function () {
+        var styles = exposedSettings.styles.map(function (style) {
+            return 'sid%5B%5D=' + style;
+        }).join('&');
+        loadAndParsePage(freakefy('/music/filter?' + styles + '&int=d%2C3&s=rate&o=desc'), []);
+    });
 };
-settingsLoader.done(function () {
-    initParse();
 
-    chrome.alarms.create('initParse', {
-        delayInMinutes: 1,
-        periodInMinutes: 30
-    });
-    chrome.alarms.onAlarm.addListener(function (alarm) {
-        if (alarm.name === 'initParse') {
-            initParse();
-        }
-    });
+initParse();
 
+chrome.alarms.create('initParse', {
+    delayInMinutes: 1,
+    periodInMinutes: 30
+});
+chrome.alarms.onAlarm.addListener(function (alarm) {
+    if (alarm.name === 'initParse') {
+        initParse();
+    }
 });
 

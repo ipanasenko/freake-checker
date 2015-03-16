@@ -14,39 +14,33 @@ function restoreSettings() {
     });
 }
 
-var freake = 'http://freake.ru';
+jQuery.get(freake).done(function (data) {
+    data = jQuery(data);
 
-document.addEventListener('DOMContentLoaded', function () {
-    jQuery.get(freake).done(function (data) {
-        data = jQuery(data);
+    var form = data.find('#form-music-filter');
 
-        var form = data.find('#form-music-filter');
+    form.find('select').not('.multiselect').remove();
+    form.find('button').parent().remove();
 
-        form.find('select').not('.multiselect').remove();
-        form.find('button').parent().remove();
-
-        var saveButton = jQuery('<button type="submit" class="btn black x">Save</button>').click(function () {
-            var selectedStyles = form.find('option:checked').map(function () {
-                return +this.value;
-            });
-            selectedStyles = Array.prototype.slice.call(selectedStyles);
-
-            var minVotes = +jQuery('#minVotes').val();
-
-            saveSettings({
-                styles: selectedStyles,
-                minVotes: minVotes
-            });
+    var saveButton = jQuery('<button type="submit" class="btn black x">Save</button>').click(function () {
+        var selectedStyles = form.find('option:checked').map(function () {
+            return +this.value;
         });
+        selectedStyles = Array.prototype.slice.call(selectedStyles);
 
-        jQuery('#styles').append(form, saveButton);
+        var minVotes = +jQuery('#minVotes').val();
 
-        restoreSettings();
-
-        jQuery('.multiselect').multiselect({
-            noneSelectedText: 'All genres'
+        saveSettings({
+            styles: selectedStyles,
+            minVotes: minVotes
         });
+    });
 
+    jQuery('#styles').append(form, saveButton);
 
+    restoreSettings();
+
+    jQuery('.multiselect').multiselect({
+        noneSelectedText: 'All genres'
     });
 });
