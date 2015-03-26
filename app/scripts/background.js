@@ -108,12 +108,13 @@ var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
     }
   });
 };
+
 var initParse = function () {
   loadSettings().done(function () {
     var styles = exposedSettings.styles.map(function (style) {
       return 'sid%5B%5D=' + style;
     }).join('&');
-    loadAndParsePage(freakefy('/music/filter?' + styles + '&int=d%2C3&s=rate&o=desc'), []);
+    loadAndParsePage(freakefy('/music/filter?' + styles + initialMusicFilter), []);
   });
 };
 
