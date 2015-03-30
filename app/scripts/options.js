@@ -1,7 +1,22 @@
-var bg = chrome.extension.getBackgroundPage();
+var bg = chrome.extension.getBackgroundPage(), changesHaveBeenMade = false;
 
-var saveSettings = function (settings) {
-  chrome.storage.local.set(settings, function () {
+var parseSettingsFromPage = function () {
+  var form = jQuery('#form-music-filter'),
+      selectedStyles = form.find('option:checked').map(function () {
+        return +this.value;
+      }),
+      minVotes = +jQuery('#minVotes').val();
+
+  return {
+    styles: Array.prototype.slice.call(selectedStyles),
+    minVotes: minVotes
+  };
+};
+
+var saveSettings = function () {
+  chrome.storage.local.set(parseSettingsFromPage(), function () {
+    changesHaveBeenMade = true;
+
     jQuery('#status').html('Saved');
     setTimeout(function () {
       jQuery('#status').empty();
@@ -24,21 +39,10 @@ var restoreSettings = function () {
   return def.promise();
 };
 
-var parseSettingsFromPage = function () {
-  var form = jQuery('#form-music-filter'),
-      selectedStyles = form.find('option:checked').map(function () {
-        return +this.value;
-      }),
-      minVotes = +jQuery('#minVotes').val();
-
-  return {
-    styles: Array.prototype.slice.call(selectedStyles),
-    minVotes: minVotes
-  };
-};
-
 window.onunload = function () {
-  bg.initParse();
+  if (changesHaveBeenMade) {
+    bg.initParse();
+  }
 };
 
 jQuery.get(freake).done(function (data) {
@@ -53,14 +57,14 @@ jQuery.get(freake).done(function (data) {
 
   restoreSettings().done(function () {
     jQuery('#minVotes').change(function () {
-      saveSettings(parseSettingsFromPage());
+      saveSettings();
     });
 
     jQuery('.multiselect').multiselect({
       noneSelectedText: 'All genres'
     }).bind('multiselectclick multiselectcheckall multiselectuncheckall', function () {
       setTimeout(function () {
-        saveSettings(parseSettingsFromPage());
+        saveSettings();
       }, 0);
     });
   });
