@@ -89,6 +89,7 @@ var loadSettings = function () {
   return settingsLoader.promise();
 };
 
+var parseProgress = null;
 var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
   jQuery.each(settings.releases || {}, function (releaseId, releaseData) {
     releaseData.actualInfo = false;
@@ -130,6 +131,13 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
       settings.releases[releaseId] = musicData;
     });
 
+    if (parseProgress.state() === 'rejected') {
+      console.log('cancelled');
+      parseProgress = null;
+      initParse();
+      return;
+    }
+
     var nextPage = data.find('.pagination li:not(.pagination-ext):has(span)').next().find('a').attr('href');
     if (nextPage) {
       loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
@@ -140,6 +148,14 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
 };
 
 var initParse = function () {
+  if (parseProgress) {
+    console.log('canceling');
+    parseProgress.reject();
+    return;
+  }
+
+  console.log('staring');
+  parseProgress = jQuery.Deferred();
   loadingBadge.show();
 
   loadSettings().done(function (settings) {
