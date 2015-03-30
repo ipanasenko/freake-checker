@@ -143,6 +143,7 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
       loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
     } else {
       saveSettings(settings, releasesFromThisParse);
+      parseProgress = null;
     }
   });
 };
