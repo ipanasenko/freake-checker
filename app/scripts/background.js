@@ -100,7 +100,7 @@ var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
       exposedSettings.releases[releaseId] = musicData;
     });
 
-    var nextPage = data.find('.pagination-this').next().find('a').attr('href');
+    var nextPage = data.find('.pagination li:not(.pagination-ext):has(span)').next().find('a').attr('href');
     if (nextPage) {
       loadAndParsePage(freakefy(nextPage), releasesFromThisParse);
     } else {
