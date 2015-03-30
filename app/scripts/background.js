@@ -4,44 +4,76 @@ chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
 });
 
-var exposedSettings = {};
+var setBadge = function (text) {
+  chrome.browserAction.setBadgeText({
+    text: text
+  });
+};
 
-var saveSettings = function (releasesFromThisParse) {
+var loadingBadge = (function () {
+  var showLoading = false;
+  return {
+    show: function () {
+      if (showLoading) {
+        return;
+      }
+      showLoading = true;
+
+      var text = '    ...'.split('');
+
+      (function update() {
+        if (!showLoading) {
+          return;
+        }
+
+        setBadge(text.join(''));
+        setTimeout(function () {
+          text.push(text.shift());
+          update();
+        }, 100);
+      }());
+    },
+    hide: function () {
+      showLoading = false;
+    }
+  }
+}());
+
+var saveSettings = function (settings, releasesFromThisParse) {
   // remove not needed ids from settings, to free some space
   console.log('releasesFromThisParse', releasesFromThisParse);
   if (releasesFromThisParse) {
-    console.log(exposedSettings.releases);
-    Object.keys(exposedSettings.releases).forEach(function (releaseId) {
+    console.log(settings.releases);
+    Object.keys(settings.releases).forEach(function (releaseId) {
       if (releasesFromThisParse.indexOf(+releaseId) === -1) {
         console.log('delete', releaseId);
-        delete exposedSettings.releases[releaseId];
+        delete settings.releases[releaseId];
       }
     });
-    console.log(exposedSettings.releases);
+    console.log(settings.releases);
   }
 
-  chrome.storage.local.set(exposedSettings, function () {
+  chrome.storage.local.set(settings, function () {
     console.log('saved');
   });
 
   var notViewed = 0;
-  jQuery.each(exposedSettings.releases, function () {
+  jQuery.each(settings.releases, function () {
     if (!this.viewed) {
       notViewed += 1;
     }
   });
 
   console.log('not viewed:', notViewed);
-  chrome.browserAction.setBadgeText({
-    text: (notViewed || '').toString()
-  });
+  loadingBadge.hide();
+  setBadge((notViewed || '').toString());
 };
 
-var setReleaseAsViewed = function (id, doSave) {
-  exposedSettings.releases[id] = {
+var setReleaseAsViewed = function (settings, id, doSave) {
+  settings.releases[id] = {
     viewed: true
   };
-  doSave && saveSettings();
+  doSave && saveSettings(settings);
 };
 
 var loadSettings = function () {
@@ -49,7 +81,6 @@ var loadSettings = function () {
 
   settingsLoader.done(function (settings) {
     console.log('settings loaded:', settings);
-    exposedSettings = settings;
   });
 
   chrome.storage.local.get(defaultSettings, function (settings) {
@@ -58,28 +89,27 @@ var loadSettings = function () {
   return settingsLoader.promise();
 };
 
-var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
-  jQuery.each(exposedSettings.releases || {}, function (releaseId, releaseData) {
+var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
+  jQuery.each(settings.releases || {}, function (releaseId, releaseData) {
     releaseData.actualInfo = false;
   });
 
   jQuery.get(pageUrl, function (data) {
     data = jQuery(data);
 
-    var musics = data.find('.music-small');
-    musics.each(function () {
+    data.find('.music-small').each(function () {
       var music = jQuery(this),
-        releaseId = +music.find('.elps a').attr('href').slice(1);
+          releaseId = +music.find('.elps a').attr('href').slice(1);
 
       releasesFromThisParse.push(releaseId);
 
-      if (exposedSettings.releases[releaseId] && exposedSettings.releases[releaseId].viewed === true) {
+      if (settings.releases[releaseId] && settings.releases[releaseId].viewed === true) {
         return;
       }
 
       var votes = +music.find('.ms-rate .info').text().replace(/\D/g, '');
 
-      if (votes < exposedSettings.minVotes) {
+      if (votes < settings.minVotes) {
         return;
       }
 
@@ -97,31 +127,32 @@ var loadAndParsePage = function (pageUrl, releasesFromThisParse) {
       musicData.released = music.find('td.type:contains("Released")').next().text();
       musicData.actualInfo = true;
 
-      exposedSettings.releases[releaseId] = musicData;
+      settings.releases[releaseId] = musicData;
     });
 
     var nextPage = data.find('.pagination li:not(.pagination-ext):has(span)').next().find('a').attr('href');
     if (nextPage) {
-      loadAndParsePage(freakefy(nextPage), releasesFromThisParse);
+      loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
     } else {
-      saveSettings(releasesFromThisParse);
+      saveSettings(settings, releasesFromThisParse);
     }
   });
 };
 
 var initParse = function () {
-  loadSettings().done(function () {
-    var styles = exposedSettings.styles.map(function (style) {
+  loadingBadge.show();
+
+  loadSettings().done(function (settings) {
+    var styles = settings.styles.map(function (style) {
       return 'sid%5B%5D=' + style;
     }).join('&');
-    loadAndParsePage(freakefy('/music/filter?' + styles + initialMusicFilter), []);
+    loadAndParsePage(freakefy('/music/filter?' + styles + initialMusicFilter), settings, []);
   });
 };
 
 initParse();
-
 chrome.alarms.create('initParse', {
-  delayInMinutes: 1,
+  delayInMinutes: 30,
   periodInMinutes: 30
 });
 chrome.alarms.onAlarm.addListener(function (alarm) {

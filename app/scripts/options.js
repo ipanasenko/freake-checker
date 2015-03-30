@@ -1,18 +1,45 @@
-function saveSettings(settings) {
+var bg = chrome.extension.getBackgroundPage();
+
+var saveSettings = function (settings) {
   chrome.storage.local.set(settings, function () {
     jQuery('#status').html('Saved');
+    setTimeout(function () {
+      jQuery('#status').empty();
+    }, 2000);
   });
-}
+};
 
-function restoreSettings() {
+var restoreSettings = function () {
+  var def = jQuery.Deferred();
+
   chrome.storage.local.get(defaultSettings, function (settings) {
+    jQuery('#minVotes').val(settings.minVotes);
     settings.styles.forEach(function (style) {
-      jQuery('input[value="' + style + '"]').click();
+      jQuery('option[value="' + style + '"]').prop('selected', true);
     });
 
-    jQuery('#minVotes').val(settings.minVotes);
+    def.resolve(settings);
   });
-}
+
+  return def.promise();
+};
+
+var parseSettingsFromPage = function () {
+  var form = jQuery('#form-music-filter'),
+      selectedStyles = form.find('option:checked').map(function () {
+        return +this.value;
+      }),
+      minVotes = +jQuery('#minVotes').val();
+
+  return {
+    styles: Array.prototype.slice.call(selectedStyles),
+    minVotes: minVotes
+  };
+};
+
+window.onunload = function () {
+  bg.initParse();
+};
 
 jQuery.get(freake).done(function (data) {
   data = jQuery(data);
@@ -22,25 +49,19 @@ jQuery.get(freake).done(function (data) {
   form.find('select').not('.multiselect').remove();
   form.find('button').parent().remove();
 
-  var saveButton = jQuery('<button type="submit" class="btn black x">Save</button>').click(function () {
-    var selectedStyles = form.find('option:checked').map(function () {
-      return +this.value;
+  jQuery('#styles').append(form);
+
+  restoreSettings().done(function () {
+    jQuery('#minVotes').change(function () {
+      saveSettings(parseSettingsFromPage());
     });
-    selectedStyles = Array.prototype.slice.call(selectedStyles);
 
-    var minVotes = +jQuery('#minVotes').val();
-
-    saveSettings({
-      styles: selectedStyles,
-      minVotes: minVotes
+    jQuery('.multiselect').multiselect({
+      noneSelectedText: 'All genres'
+    }).bind('multiselectclick multiselectcheckall multiselectuncheckall', function () {
+      setTimeout(function () {
+        saveSettings(parseSettingsFromPage());
+      }, 0);
     });
-  });
-
-  jQuery('#styles').append(form, saveButton);
-
-  restoreSettings();
-
-  jQuery('.multiselect').multiselect({
-    noneSelectedText: 'All genres'
   });
 });
