@@ -20,7 +20,7 @@ var saveSettings = function (releasesFromThisParse) {
     console.log(exposedSettings.releases);
   }
 
-  chrome.storage.sync.set(exposedSettings, function () {
+  chrome.storage.local.set(exposedSettings, function () {
     console.log('saved');
   });
 
@@ -52,7 +52,7 @@ var loadSettings = function () {
     exposedSettings = settings;
   });
 
-  chrome.storage.sync.get(defaultSettings, function (settings) {
+  chrome.storage.local.get(defaultSettings, function (settings) {
     settingsLoader.resolve(settings);
   });
   return settingsLoader.promise();
