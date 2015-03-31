@@ -147,6 +147,7 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
       parseProgress = null;
     }
   }).error(function () {
+    saveSettings(settings);
     parseProgress.reject();
     parseProgress = null;
   });
