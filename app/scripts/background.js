@@ -100,7 +100,7 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
 
     data.find('.music-small').each(function () {
       var music = jQuery(this),
-          releaseId = +music.find('.elps a').attr('href').slice(1);
+        releaseId = +music.find('.elps a').attr('href').slice(1);
 
       releasesFromThisParse.push(releaseId);
 
@@ -143,8 +143,12 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
       loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
     } else {
       saveSettings(settings, releasesFromThisParse);
+      parseProgress.resolve();
       parseProgress = null;
     }
+  }).error(function () {
+    parseProgress.reject();
+    parseProgress = null;
   });
 };
 
