@@ -2,10 +2,10 @@ var bg = chrome.extension.getBackgroundPage(), changesHaveBeenMade = false;
 
 var parseSettingsFromPage = function () {
   var form = jQuery('#form-music-filter'),
-      selectedStyles = form.find('option:checked').map(function () {
-        return +this.value;
-      }),
-      minVotes = +jQuery('#minVotes').val();
+    selectedStyles = form.find('option:checked').map(function () {
+      return +this.value;
+    }),
+    minVotes = +jQuery('#minVotes').val();
 
   return {
     styles: Array.prototype.slice.call(selectedStyles),
@@ -13,12 +13,14 @@ var parseSettingsFromPage = function () {
   };
 };
 
+var tId;
 var saveSettings = function () {
   chrome.storage.local.set(parseSettingsFromPage(), function () {
     changesHaveBeenMade = true;
-
     jQuery('#status').html('Saved');
-    setTimeout(function () {
+
+    clearTimeout(tId);
+    tId = setTimeout(function () {
       jQuery('#status').empty();
     }, 2000);
   });
