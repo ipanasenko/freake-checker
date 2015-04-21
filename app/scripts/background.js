@@ -157,6 +157,8 @@ var initParse = function () {
   if (parseProgress) {
     console.log('canceling');
     parseProgress.reject();
+    parseProgress = null;
+    loadingBadge.hide();
     return;
   }
 
