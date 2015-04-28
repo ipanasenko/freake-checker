@@ -1,6 +1,6 @@
 'use strict';
 
-var bg = chrome.extension.getBackgroundPage();
+var bg = chrome.extension.getBackgroundPage(), musicContainer = jQuery('#music-container');
 
 bg.loadSettings().done(function (settings) {
   var insertDataInTemplate = (function () {
@@ -30,114 +30,101 @@ bg.loadSettings().done(function (settings) {
 			<div class="ms-style elps">#styles#</div>\
 			<table>\
 				<tbody><tr><td class="type">Released:</td><td class="cptz"><a href="' + freake + '/music/filter?r=#released#">#released#</a></td></tr>\
-				<!--tr><td class="type">Type:</td><td><a href="' + freake + '/music/filter?t=#type#"><b>#type#</b></a></td></tr-->\
-				<!--tr><td class="type">Comments:</td><td><a href="' + freake + '/#id##comm">#comments#</a></td></tr-->\
 			</tbody></table>\
 			<div class="ms-style elps"><button>mark as viewed</button></div>\
 		</div>\
 	</div>';
 
-  var musicContainer = jQuery('#music-container');
-  var loadReleases = function () {
+  var loadReleases = function (releases) {
+    releases = releases || bg.releases;
+
+    if (!releases) {
+      musicContainer.html('loading...');
+      return;
+    }
+
     musicContainer.empty();
 
+    console.log('releases', releases);
+
     var sorted = [];
-    console.log('releases', settings.releases);
-    jQuery.each(settings.releases, function () {
+    jQuery.each(releases, function () {
       if (this.viewed) {
         return;
       }
-
       sorted.push(this);
     });
-    console.log(sorted);
+
     sorted = sorted.sort(function (a, b) {
       return parseFloat(b.votes) - parseFloat(a.votes);
     });
 
-    var ajaxes = [];
+    console.log(sorted);
 
     jQuery.each(sorted.slice(0, 10), function (i, releaseData) {
-      var music;
-      if (releaseData.actualInfo === true) {
-        music = jQuery(insertDataInTemplate(template, releaseData));
-      } else {
-        releaseData.actualInfo = true;
-
-        music = jQuery('<div class="music-small clearfix">Loading release info...</div>');
-
-        var releaseId = releaseData.id;
-
-        var href = freakefy('/' + releaseId);
-        var ajax = jQuery.get(href, function (data) {
-          data = jQuery(data);
-
-          var coverImg = data.find('.blc-image img');
-
-          var musicData = {};
-
-          musicData.id = releaseId;
-          musicData.cover = coverImg.attr('src');
-          musicData.title = coverImg.attr('alt');
-          musicData.performerAndTitle = data.find('.post-title h1').text();
-          musicData.votes = data.find('#rate-v-' + releaseId).text();
-          musicData.rating = data.find('#rate-r-' + releaseId).text() / 5 * 80;
-          musicData.styles = data.find('td.type:contains("Style")').next().text();
-          musicData.released = data.find('td.type:contains("Released")').next().text();
-          musicData.actualInfo = true;
-
-          settings.releases[releaseId] = musicData;
-
-          music.replaceWith(insertDataInTemplate(template, musicData));
-        });
-
-        ajaxes.push(ajax);
-      }
+      var music = jQuery(insertDataInTemplate(template, releaseData));
 
       musicContainer.append(music);
     });
 
-    jQuery.when.apply(jQuery, ajaxes).then(function () {
-      bg.saveSettings(settings);
-    });
+    bg.saveSettings(settings);
   };
 
   loadReleases();
-
-  jQuery(document).on('click', '.music-small a', function () {
-    chrome.tabs.create({
-      url: this.href
-    });
-  }).on('click', '.music-small button', function () {
-    var musicWrapper = jQuery(this).closest('.music-small');
-    var id = musicWrapper.data('release-id');
-
-    bg.setReleaseAsViewed(settings, id, true);
-    musicWrapper.remove();
-  }).on('click', '#markAll', function () {
-    jQuery('.music-small').each(function () {
-      var id = jQuery(this).data('release-id');
-
-      bg.setReleaseAsViewed(settings, id, false);
-    });
-    bg.saveSettings(settings);
-    loadReleases();
-  }).on('click', '#openAll', function () {
-    jQuery('.music-small').each(function (i) {
-      var id = jQuery(this).data('release-id'),
-          url = jQuery(this).find('a').attr('href');
-
-      setTimeout(function () {
-        chrome.tabs.create({
-          url: url
-        });
-      }, i);
-
-      bg.setReleaseAsViewed(settings, id, false);
-    });
-
-    bg.saveSettings(settings);
-    loadReleases();
+  chrome.runtime.onMessage.addListener(function (request) {
+    loadReleases(request.releases);
   });
 
+  var setReleaseAsViewed = function (settings, id, doSave) {
+    settings.releases[id] = {
+      viewed: true
+    };
+
+    if (doSave) {
+      bg.saveSettings(settings);
+    }
+  };
+
+  jQuery(document)
+    .on('click', 'a', function (e) {
+      e.preventDefault();
+    })
+    .on('click', '.music-small a', function () {
+      chrome.tabs.create({
+        url: this.href
+      });
+    })
+    .on('click', '.music-small button', function () {
+      var musicWrapper = jQuery(this).closest('.music-small');
+      var id = musicWrapper.data('release-id');
+
+      setReleaseAsViewed(settings, id, true);
+      musicWrapper.remove();
+    })
+    .on('click', '#markAll', function () {
+      jQuery('.music-small').each(function () {
+        var id = jQuery(this).data('release-id');
+
+        setReleaseAsViewed(settings, id, false);
+      });
+      bg.saveSettings(settings);
+      loadReleases();
+    })
+    .on('click', '#openAll', function () {
+      jQuery('.music-small').each(function (i) {
+        var id = jQuery(this).data('release-id'),
+          url = jQuery(this).find('a').attr('href');
+
+        setTimeout(function () {
+          chrome.tabs.create({
+            url: url
+          });
+        }, i);
+
+        setReleaseAsViewed(settings, id, false);
+      });
+
+      bg.saveSettings(settings);
+      loadReleases();
+    });
 });

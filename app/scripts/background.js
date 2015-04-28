@@ -4,6 +4,8 @@ chrome.runtime.onInstalled.addListener(function (details) {
   console.log('previousVersion', details.previousVersion);
 });
 
+var releases;
+
 var setBadge = function (text) {
   chrome.browserAction.setBadgeText({
     text: text
@@ -39,6 +41,10 @@ var loadingBadge = (function () {
   }
 }());
 
+var sendMessage = function (releases) {
+  chrome.runtime.sendMessage({releases: releases});
+};
+
 var saveSettings = function (settings, releasesFromThisParse) {
   // remove not needed ids from settings, to free some space
   console.log('releasesFromThisParse', releasesFromThisParse);
@@ -57,6 +63,9 @@ var saveSettings = function (settings, releasesFromThisParse) {
     console.log('saved');
   });
 
+  releases = settings.releases;
+  sendMessage(releases);
+
   var notViewed = 0;
   jQuery.each(settings.releases, function () {
     if (!this.viewed) {
@@ -67,13 +76,6 @@ var saveSettings = function (settings, releasesFromThisParse) {
   console.log('not viewed:', notViewed);
   loadingBadge.hide();
   setBadge((notViewed || '').toString());
-};
-
-var setReleaseAsViewed = function (settings, id, doSave) {
-  settings.releases[id] = {
-    viewed: true
-  };
-  doSave && saveSettings(settings);
 };
 
 var loadSettings = function () {
@@ -91,9 +93,6 @@ var loadSettings = function () {
 
 var parseProgress = null;
 var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
-  jQuery.each(settings.releases || {}, function (releaseId, releaseData) {
-    releaseData.actualInfo = false;
-  });
 
   jQuery.get(pageUrl, function (data) {
     data = jQuery(data);
@@ -126,7 +125,6 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
       musicData.rating = music.find('.ms-rate .current').css('width').slice(0, -2);
       musicData.styles = music.find('td.type:contains("Style")').next().text();
       musicData.released = music.find('td.type:contains("Released")').next().text();
-      musicData.actualInfo = true;
 
       settings.releases[releaseId] = musicData;
     });
