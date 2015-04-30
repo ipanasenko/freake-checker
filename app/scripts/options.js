@@ -1,3 +1,7 @@
+/* global freake */
+/* global defaultSettings */
+/* global chrome */
+/* global jQuery */
 var bg = chrome.extension.getBackgroundPage(), changesHaveBeenMade = false;
 
 var parseSettingsFromPage = function () {
