@@ -62,8 +62,6 @@ bg.loadSettings().done(function (settings) {
 
       musicContainer.append(music);
     });
-
-    bg.saveSettings(settings);
   };
 
   loadReleases();
