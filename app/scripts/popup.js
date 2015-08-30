@@ -45,8 +45,6 @@ bg.loadSettings().done(function (settings) {
 
     musicContainer.empty();
 
-    console.log('releases', releases);
-
     var sorted = [];
     jQuery.each(releases, function () {
       if (this.viewed) {
@@ -58,8 +56,6 @@ bg.loadSettings().done(function (settings) {
     sorted = sorted.sort(function (a, b) {
       return parseFloat(b.votes) - parseFloat(a.votes);
     });
-
-    console.log(sorted);
 
     jQuery.each(sorted.slice(0, 10), function (i, releaseData) {
       var music = jQuery(insertDataInTemplate(template, releaseData));

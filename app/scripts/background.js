@@ -1,7 +1,6 @@
 'use strict';
 
 chrome.runtime.onInstalled.addListener(function (details) {
-  console.log('previousVersion', details.previousVersion);
 });
 
 var releases;
@@ -47,20 +46,15 @@ var sendMessage = function (releases) {
 
 var saveSettings = function (settings, releasesFromThisParse) {
   // remove not needed ids from settings, to free some space
-  console.log('releasesFromThisParse', releasesFromThisParse);
   if (releasesFromThisParse) {
-    console.log(settings.releases);
     Object.keys(settings.releases).forEach(function (releaseId) {
       if (releasesFromThisParse.indexOf(+releaseId) === -1) {
-        console.log('delete', releaseId);
         delete settings.releases[releaseId];
       }
     });
-    console.log(settings.releases);
   }
 
   chrome.storage.local.set(settings, function () {
-    console.log('saved');
   });
 
   releases = settings.releases;
@@ -73,7 +67,6 @@ var saveSettings = function (settings, releasesFromThisParse) {
     }
   });
 
-  console.log('not viewed:', notViewed);
   loadingBadge.hide();
   setBadge((notViewed || '').toString());
 };
@@ -82,7 +75,6 @@ var loadSettings = function () {
   var settingsLoader = jQuery.Deferred();
 
   settingsLoader.done(function (settings) {
-    console.log('settings loaded:', settings);
   });
 
   chrome.storage.local.get(defaultSettings, function (settings) {
@@ -130,7 +122,6 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
     });
 
     if (parseProgress.state() === 'rejected') {
-      console.log('cancelled');
       parseProgress = null;
       initParse();
       return;
@@ -153,14 +144,12 @@ var loadAndParsePage = function (pageUrl, settings, releasesFromThisParse) {
 
 var initParse = function () {
   if (parseProgress) {
-    console.log('canceling');
     parseProgress.reject();
     parseProgress = null;
     loadingBadge.hide();
     return;
   }
 
-  console.log('staring');
   parseProgress = jQuery.Deferred();
   loadingBadge.show();
 
