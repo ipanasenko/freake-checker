@@ -1,6 +1,7 @@
 body {
   padding: 20px;
   min-width: 350px;
+  min-height: 1000px;
 }
 
 * {
@@ -21,7 +22,6 @@ body {
 }
 
 .music-small {
-  float: left;
   width: 350px;
   font-size: 11px;
   margin-bottom: 15px;
