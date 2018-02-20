@@ -184,7 +184,9 @@ var initParse = function() {
 };
 
 var finishParse = function() {
-  parseProgress.reject();
+  if (parseProgress) {
+    parseProgress.reject();
+  }
   parseProgress = null;
   chrome.alarms.create('initParse', { delayInMinutes: 30 });
 };
