@@ -2,40 +2,41 @@
 /* global defaultSettings */
 /* global chrome */
 /* global jQuery */
-var bg = chrome.extension.getBackgroundPage(), changesHaveBeenMade = false;
+var bg = chrome.extension.getBackgroundPage(),
+  changesHaveBeenMade = false;
 
-var parseSettingsFromPage = function () {
+var parseSettingsFromPage = function() {
   var form = jQuery('#form-music-filter'),
-    selectedStyles = form.find('option:checked').map(function () {
+    selectedStyles = form.find('option:checked').map(function() {
       return +this.value;
     }),
     minVotes = +jQuery('#minVotes').val();
 
   return {
     styles: Array.prototype.slice.call(selectedStyles),
-    minVotes: minVotes
+    minVotes: minVotes,
   };
 };
 
 var tId;
-var saveSettings = function () {
-  chrome.storage.local.set(parseSettingsFromPage(), function () {
+var saveSettings = function() {
+  chrome.storage.local.set(parseSettingsFromPage(), function() {
     changesHaveBeenMade = true;
     jQuery('#status').html('Saved');
 
     clearTimeout(tId);
-    tId = setTimeout(function () {
+    tId = setTimeout(function() {
       jQuery('#status').empty();
     }, 2000);
   });
 };
 
-var restoreSettings = function () {
+var restoreSettings = function() {
   var def = jQuery.Deferred();
 
-  chrome.storage.local.get(defaultSettings, function (settings) {
+  chrome.storage.local.get(defaultSettings, function(settings) {
     jQuery('#minVotes').val(settings.minVotes);
-    settings.styles.forEach(function (style) {
+    settings.styles.forEach(function(style) {
       jQuery('option[value="' + style + '"]').prop('selected', true);
     });
 
@@ -45,33 +46,41 @@ var restoreSettings = function () {
   return def.promise();
 };
 
-window.onunload = function () {
+window.onunload = function() {
   if (changesHaveBeenMade) {
     bg.initParse();
   }
 };
 
-jQuery.get(freake).done(function (data) {
+jQuery.get(freake).done(function(data) {
   data = jQuery(data);
 
   var form = data.find('#form-music-filter');
 
-  form.find('select').not('.multiselect').remove();
-  form.find('button').parent().remove();
+  form
+    .find('select')
+    .not('.multiselect')
+    .remove();
+  form
+    .find('button')
+    .parent()
+    .remove();
 
   jQuery('#styles').append(form);
 
-  restoreSettings().done(function () {
-    jQuery('#minVotes').change(function () {
+  restoreSettings().done(function() {
+    jQuery('#minVotes').change(function() {
       saveSettings();
     });
 
-    jQuery('.multiselect').multiselect({
-      noneSelectedText: 'All genres'
-    }).bind('multiselectclick multiselectcheckall multiselectuncheckall', function () {
-      setTimeout(function () {
-        saveSettings();
-      }, 0);
-    });
+    jQuery('.multiselect')
+      .multiselect({
+        noneSelectedText: 'All genres',
+      })
+      .bind('multiselectclick multiselectcheckall multiselectuncheckall', function() {
+        setTimeout(function() {
+          saveSettings();
+        }, 0);
+      });
   });
 });

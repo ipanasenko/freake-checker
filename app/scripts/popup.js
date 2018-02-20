@@ -19,7 +19,7 @@ bg.loadSettings().done(function (settings) {
   var template = '\
 	<div class="music-small clearfix" data-release-id="#id#">\
 		<div class="ms-image">\
-			<a href="' + freake + '/#id#"><img src="' + freake + '#cover#" alt="#title#"></a>\
+			<a href="' + freake + '/#id#"><img src="#cover#" alt="#title#"></a>\
 		</div>\
 		<div class="ms-info">\
 			<h3 class="elps"><a href="' + freake + '/#id#" title="#title#">#performerAndTitle#</a></h3>\
