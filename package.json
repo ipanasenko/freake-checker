@@ -1,6 +1,6 @@
 {
   "name": "freake-checker",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "prettier": {
     "printWidth": 120,
     "singleQuote": true,
