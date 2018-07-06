@@ -84,6 +84,8 @@ var parseProgress = null;
 var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
   jQuery
     .get(pageUrl, function(data) {
+      var shouldStop = false;
+
       data = jQuery(
         data.replace(/(<img src=")(\/upload[^"]+)("[^>]+>)/g, function(all, before, src, after) {
           return `${before}${freakefy(src)}${after};`;
@@ -109,6 +111,10 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
           .replace(/\D/g, '');
 
         if (votes < settings.minVotes) {
+          if (votes <= settings.minVotes / 2) {
+            shouldStop = true;
+          }
+
           return;
         }
 
@@ -149,7 +155,7 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
         .find('a')
         .attr('href');
 
-      if (nextPage) {
+      if (nextPage && !shouldStop) {
         loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
       } else {
         saveSettings(settings, releasesFromThisParse);
@@ -188,7 +194,7 @@ var finishParse = function() {
     parseProgress.reject();
   }
   parseProgress = null;
-  chrome.alarms.create('initParse', { delayInMinutes: 30 });
+  chrome.alarms.create('initParse', { delayInMinutes: 120 });
 };
 
 initParse();
