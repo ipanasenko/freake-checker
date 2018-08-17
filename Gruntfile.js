@@ -7,8 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
-module.exports = function (grunt) {
-
+module.exports = function(grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -18,11 +17,10 @@ module.exports = function (grunt) {
   // Configurable paths
   var config = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
   };
 
   grunt.initConfig({
-
     // Project settings
     config: config,
 
@@ -30,36 +28,36 @@ module.exports = function (grunt) {
     watch: {
       bower: {
         files: ['bower.json'],
-        tasks: ['bowerInstall']
+        tasks: ['bowerInstall'],
       },
       js: {
         files: ['<%= config.app %>/scripts/{,*/}*.js'],
         tasks: [],
         options: {
-          livereload: true
-        }
+          livereload: true,
+        },
       },
       gruntfile: {
-        files: ['Gruntfile.js']
+        files: ['Gruntfile.js'],
       },
       styles: {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
         tasks: [],
         options: {
-          livereload: true
-        }
+          livereload: true,
+        },
       },
       livereload: {
         options: {
-          livereload: '<%= connect.options.livereload %>'
+          livereload: '<%= connect.options.livereload %>',
         },
         files: [
           '<%= config.app %>/*.html',
           '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
           '<%= config.app %>/manifest.json',
-          '<%= config.app %>/_locales/{,*/}*.json'
-        ]
-      }
+          '<%= config.app %>/_locales/{,*/}*.json',
+        ],
+      },
     },
 
     // Grunt server and debug server setting
@@ -68,60 +66,51 @@ module.exports = function (grunt) {
         port: 9000,
         livereload: 35729,
         // change this to '0.0.0.0' to access the server from outside
-        hostname: 'localhost'
+        hostname: 'localhost',
       },
       chrome: {
         options: {
           open: false,
-          base: [
-            '<%= config.app %>'
-          ]
-        }
-      }
+          base: ['<%= config.app %>'],
+        },
+      },
     },
 
     // Empties folders to start fresh
     clean: {
       chrome: {},
       dist: {
-        files: [{
-          dot: true,
-          src: [
-            '<%= config.dist %>/*',
-            '!<%= config.dist %>/.git*'
-          ]
-        }]
-      }
+        files: [
+          {
+            dot: true,
+            src: ['<%= config.dist %>/*', '!<%= config.dist %>/.git*'],
+          },
+        ],
+      },
     },
 
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
         jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
       },
-      all: [
-        'Gruntfile.js',
-        '<%= config.app %>/scripts/{,*/}*.js',
-        '!<%= config.app %>/scripts/vendor/*'
-      ]
+      all: ['Gruntfile.js', '<%= config.app %>/scripts/{,*/}*.js', '!<%= config.app %>/scripts/vendor/*'],
     },
     mocha: {
       all: {
         options: {
           run: true,
-          urls: ['http://localhost:<%= connect.options.port %>/index.html']
-        }
-      }
+          urls: ['http://localhost:<%= connect.options.port %>/index.html'],
+        },
+      },
     },
 
     // Automatically inject Bower components into the HTML file
     bowerInstall: {
       app: {
-        src: [
-          '<%= config.app %>/*.html'
-        ]
-      }
+        src: ['<%= config.app %>/*.html'],
+      },
     },
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
@@ -129,44 +118,45 @@ module.exports = function (grunt) {
     // additional tasks can operate on them
     useminPrepare: {
       options: {
-        dest: '<%= config.dist %>'
+        dest: '<%= config.dist %>',
       },
-      html: [
-        '<%= config.app %>/popup.html',
-        '<%= config.app %>/options.html'
-      ]
+      html: ['<%= config.app %>/popup.html', '<%= config.app %>/options.html'],
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
       options: {
-        assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
+        assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images'],
       },
       html: ['<%= config.dist %>/{,*/}*.html'],
-      css: ['<%= config.dist %>/styles/{,*/}*.css']
+      css: ['<%= config.dist %>/styles/{,*/}*.css'],
     },
 
     // The following *-min tasks produce minifies files in the dist folder
     imagemin: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= config.app %>/images',
-          src: '{,*/}*.{gif,jpeg,jpg,png}',
-          dest: '<%= config.dist %>/images'
-        }]
-      }
+        files: [
+          {
+            expand: true,
+            cwd: '<%= config.app %>/images',
+            src: '{,*/}*.{gif,jpeg,jpg,png}',
+            dest: '<%= config.dist %>/images',
+          },
+        ],
+      },
     },
 
     svgmin: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= config.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= config.dist %>/images'
-        }]
-      }
+        files: [
+          {
+            expand: true,
+            cwd: '<%= config.app %>/images',
+            src: '{,*/}*.svg',
+            dest: '<%= config.dist %>/images',
+          },
+        ],
+      },
     },
 
     htmlmin: {
@@ -181,13 +171,15 @@ module.exports = function (grunt) {
           // removeEmptyAttributes: true,
           // removeOptionalTags: true
         },
-        files: [{
-          expand: true,
-          cwd: '<%= config.app %>',
-          src: '*.html',
-          dest: '<%= config.dist %>'
-        }]
-      }
+        files: [
+          {
+            expand: true,
+            cwd: '<%= config.app %>',
+            src: '*.html',
+            dest: '<%= config.dist %>',
+          },
+        ],
+      },
     },
 
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
@@ -218,24 +210,26 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= config.app %>',
-          dest: '<%= config.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            'images/{,*/}*.{webp,gif}',
-            'images/{,*/}*.png',
-            '{,*/}*.html',
-            'styles/{,*/}*.css',
-            'styles/fonts/{,*/}*.*',
-            '_locales/{,*/}*.json',
-            'scripts/*.js',
-            'manifest.json'
-          ]
-        }]
-      }
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= config.app %>',
+            dest: '<%= config.dist %>',
+            src: [
+              '*.{ico,png,txt}',
+              'images/{,*/}*.{webp,gif}',
+              'images/{,*/}*.png',
+              '{,*/}*.html',
+              'styles/{,*/}*.css',
+              'styles/fonts/{,*/}*.*',
+              '_locales/{,*/}*.json',
+              'scripts/*.js',
+              'manifest.json',
+            ],
+          },
+        ],
+      },
     },
 
     // Run some tasks in parallel to speed up build process
@@ -244,7 +238,7 @@ module.exports = function (grunt) {
       dist: [
         //'imagemin',
         //'svgmin'
-      ]
+      ],
     },
 
     bump: {
@@ -252,35 +246,37 @@ module.exports = function (grunt) {
         files: ['app/manifest.json', 'package.json', 'bower.json'],
         commitFiles: ['.'],
         commitMessage: 'chore: release v%VERSION%',
-        push: false
-      }
+        push: false,
+      },
     },
 
     // Compres dist files to package
     compress: {
       dist: {
         options: {
-          archive: function () {
+          archive: function() {
             var manifest = grunt.file.readJSON('app/manifest.json');
             return 'package/freake checker-' + manifest.version + '.zip';
-          }
+          },
         },
-        files: [{
-          expand: true,
-          cwd: 'dist/',
-          src: ['**'],
-          dest: ''
-        }]
-      }
-    }
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/',
+            src: ['**'],
+            dest: '',
+          },
+        ],
+      },
+    },
   });
 
-  grunt.registerTask('debug', function () {
+  grunt.registerTask('debug', function() {
     grunt.task.run([
       //'jshint',
       'concurrent:chrome',
       'connect:chrome',
-      'watch'
+      'watch',
     ]);
   });
 
@@ -293,19 +289,15 @@ module.exports = function (grunt) {
     //'uglify',
     'copy',
     'usemin',
-    'compress'
+    'compress',
   ]);
 
-  grunt.registerTask('release', 'Bump version, update changelog and tag version', function (version) {
-    grunt.task.run([
-      'bump:' + (version || 'patch') + ':bump-only',
-      'build',
-      'bump-commit'
-    ]);
+  grunt.registerTask('release', 'Bump version, update changelog and tag version', function(version) {
+    grunt.task.run(['bump:' + (version || 'patch') + ':bump-only', 'build', 'bump-commit']);
   });
 
   grunt.registerTask('default', [
     //'jshint',
-    'build'
+    'build',
   ]);
 };

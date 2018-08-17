@@ -94,10 +94,12 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
 
       data.find('.music-small').each(function() {
         var music = jQuery(this);
-        var releaseId = +music
-          .find('.elps a')
-          .attr('href')
-          .slice(1);
+        var releaseId = Number(
+          music
+            .find('.elps a')
+            .attr('href')
+            .slice(1),
+        );
 
         releasesFromThisParse.push(releaseId);
 
