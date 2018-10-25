@@ -2,16 +2,16 @@
 
 chrome.runtime.onInstalled.addListener(function(details) {});
 
-var releases;
+let releases;
 
-var setBadge = function(text) {
+const setBadge = function(text) {
   chrome.browserAction.setBadgeText({
     text: text,
   });
 };
 
-var loadingBadge = (function() {
-  var showLoading = false;
+const loadingBadge = (function() {
+  let showLoading = false;
   return {
     show: function() {
       if (showLoading) {
@@ -19,19 +19,7 @@ var loadingBadge = (function() {
       }
       showLoading = true;
 
-      var text = '    ...'.split('');
-
-      (function update() {
-        if (!showLoading) {
-          return;
-        }
-
-        setBadge(text.join(''));
-        setTimeout(function() {
-          text.push(text.shift());
-          update();
-        }, 100);
-      })();
+      setBadge('...');
     },
     hide: function() {
       showLoading = false;
@@ -39,11 +27,11 @@ var loadingBadge = (function() {
   };
 })();
 
-var sendMessage = function(releases) {
-  chrome.runtime.sendMessage({ releases: releases });
+const sendMessage = function(releases) {
+  chrome.runtime.sendMessage({ releases });
 };
 
-var saveSettings = function(settings, releasesFromThisParse) {
+const saveSettings = function(settings, releasesFromThisParse) {
   // remove not needed ids from settings, to free some space
   if (releasesFromThisParse) {
     Object.keys(settings.releases).forEach(function(releaseId) {
@@ -58,7 +46,7 @@ var saveSettings = function(settings, releasesFromThisParse) {
   releases = settings.releases;
   sendMessage(releases);
 
-  var notViewed = 0;
+  let notViewed = 0;
   jQuery.each(settings.releases, function() {
     if (!this.viewed) {
       notViewed += 1;
@@ -69,8 +57,8 @@ var saveSettings = function(settings, releasesFromThisParse) {
   setBadge((notViewed || '').toString());
 };
 
-var loadSettings = function() {
-  var settingsLoader = jQuery.Deferred();
+const loadSettings = function() {
+  const settingsLoader = jQuery.Deferred();
 
   settingsLoader.done(function(settings) {});
 
@@ -80,21 +68,22 @@ var loadSettings = function() {
   return settingsLoader.promise();
 };
 
-var parseProgress = null;
-var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
+let parseProgress = null;
+const loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
   jQuery
     .get(pageUrl, function(data) {
-      var shouldStop = false;
+      let shouldStop = false;
 
       data = jQuery(
-        data.replace(/(<img src=")(\/upload[^"]+)("[^>]+>)/g, function(all, before, src, after) {
-          return `${before}${freakefy(src)}${after};`;
-        }),
+        data.replace(
+          /(<img src=")(\/upload[^"]+)("[^>]+>)/g,
+          (all, before, src, after) => `<noscript>${before}${freakefy(src)}${after}</noscript>`,
+        ),
       );
 
       data.find('.music-small').each(function() {
-        var music = jQuery(this);
-        var releaseId = Number(
+        const music = jQuery(this);
+        const releaseId = Number(
           music
             .find('.elps a')
             .attr('href')
@@ -107,7 +96,7 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
           return;
         }
 
-        var votes = +music
+        const votes = +music
           .find('.ms-rate .info')
           .text()
           .replace(/\D/g, '');
@@ -120,9 +109,9 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
           return;
         }
 
-        var coverImg = music.find('.ms-image img');
+        const coverImg = music.find('.ms-image img');
 
-        var musicData = {};
+        const musicData = {};
 
         musicData.id = releaseId;
         musicData.cover = coverImg.attr('src');
@@ -151,14 +140,16 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
         return;
       }
 
-      var nextPage = data
+      const nextPage = data
         .find('.pagination li:not(.pagination-ext):has(span)')
         .next()
         .find('a')
         .attr('href');
 
       if (nextPage && !shouldStop) {
-        loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
+        setTimeout(() => {
+          loadAndParsePage(freakefy(nextPage), settings, releasesFromThisParse);
+        }, 1000);
       } else {
         saveSettings(settings, releasesFromThisParse);
         finishParse();
@@ -170,7 +161,7 @@ var loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
     });
 };
 
-var initParse = function() {
+const initParse = function() {
   if (parseProgress) {
     parseProgress.reject();
     parseProgress = null;
@@ -182,7 +173,7 @@ var initParse = function() {
   loadingBadge.show();
 
   loadSettings().done(function(settings) {
-    var styles = settings.styles
+    const styles = settings.styles
       .map(function(style) {
         return 'sid%5B%5D=' + style;
       })
@@ -191,7 +182,7 @@ var initParse = function() {
   });
 };
 
-var finishParse = function() {
+const finishParse = function() {
   if (parseProgress) {
     parseProgress.reject();
   }
