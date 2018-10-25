@@ -75,9 +75,8 @@ const loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
       let shouldStop = false;
 
       data = jQuery(
-        data.replace(
-          /(<img src=")(\/upload[^"]+)("[^>]+>)/g,
-          (all, before, src, after) => `<noscript>${before}${freakefy(src)}${after}</noscript>`,
+        data.replace(/(<img src=")(\/upload[^"]+)("[^>]+>)/g, (all, before, src, after) =>
+          `${before}${freakefy(src)}${after}`.replace('<img', '<span class="ex-img"'),
         ),
       );
 
@@ -109,7 +108,7 @@ const loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
           return;
         }
 
-        const coverImg = music.find('.ms-image img');
+        const coverImg = music.find('.ms-image .ex-img');
 
         const musicData = {};
 
