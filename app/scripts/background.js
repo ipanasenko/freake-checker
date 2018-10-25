@@ -2,7 +2,7 @@
 
 chrome.runtime.onInstalled.addListener(function(details) {});
 
-let releases;
+var releases;
 
 const setBadge = function(text) {
   chrome.browserAction.setBadgeText({
@@ -31,7 +31,7 @@ const sendMessage = function(releases) {
   chrome.runtime.sendMessage({ releases });
 };
 
-const saveSettings = function(settings, releasesFromThisParse) {
+var saveSettings = function(settings, releasesFromThisParse) {
   // remove not needed ids from settings, to free some space
   if (releasesFromThisParse) {
     Object.keys(settings.releases).forEach(function(releaseId) {
@@ -57,7 +57,7 @@ const saveSettings = function(settings, releasesFromThisParse) {
   setBadge((notViewed || '').toString());
 };
 
-const loadSettings = function() {
+var loadSettings = function() {
   const settingsLoader = jQuery.Deferred();
 
   settingsLoader.done(function(settings) {});
@@ -161,7 +161,7 @@ const loadAndParsePage = function(pageUrl, settings, releasesFromThisParse) {
     });
 };
 
-const initParse = function() {
+var initParse = function() {
   if (parseProgress) {
     parseProgress.reject();
     parseProgress = null;
