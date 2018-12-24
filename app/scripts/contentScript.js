@@ -10,7 +10,7 @@ const copyText = text => {
 
   document.body.appendChild(input);
 
-  input.value = text;
+  input.value = text.replace(/\s&\s/g, ' ');
 
   input.select();
 
