@@ -57,10 +57,6 @@ babylon@7.0.0-beta.19:
   version "7.0.0-beta.19"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/babylon/-/babylon-7.0.0-beta.19.tgz#e928c7e807e970e0536b078ab3e0c48f9e052503"
 
-balanced-match@^1.0.0:
-  version "1.0.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
-
 batch@0.5.0:
   version "0.5.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/batch/-/batch-0.5.0.tgz#fd2e05a7a5d696b4db9314013e285d8ff3557ec3"
@@ -83,13 +79,6 @@ bower-config@~0.5.0:
     mout "~0.9.0"
     optimist "~0.6.0"
     osenv "0.0.3"
-
-brace-expansion@^1.1.7:
-  version "1.1.11"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-  dependencies:
-    balanced-match "^1.0.0"
-    concat-map "0.0.1"
 
 buffer-crc32@0.2.1:
   version "0.2.1"
@@ -141,12 +130,6 @@ clean-css@~2.1.0:
   dependencies:
     commander "2.1.x"
 
-cli@0.4.x:
-  version "0.4.5"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/cli/-/cli-0.4.5.tgz#78f9485cd161b566e9a6c72d7170c4270e81db61"
-  dependencies:
-    glob ">= 3.1.4"
-
 cliui@^2.1.0:
   version "2.1.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/cliui/-/cliui-2.1.0.tgz#4b475760ff80264c762c3a1719032e91c7fea0d1"
@@ -176,10 +159,6 @@ commander@2.1.x:
 compressible@1.0.0:
   version "1.0.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/compressible/-/compressible-1.0.0.tgz#f83e49c1cb61421753545125a8011d68b492427d"
-
-concat-map@0.0.1:
-  version "0.0.1"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
 concat-stream@^1.4.1:
   version "1.6.0"
@@ -213,10 +192,6 @@ connect@~2.13.0:
     raw-body "1.1.3"
     send "0.1.4"
     uid2 "0.0.3"
-
-console-browserify@0.1.x:
-  version "0.1.6"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/console-browserify/-/console-browserify-0.1.6.tgz#d128a3c0bb88350eb5626c6e7c71a6f0fd48983c"
 
 cookie-signature@1.0.1:
   version "1.0.1"
@@ -283,22 +258,6 @@ deflate-crc32-stream@~0.1.0:
   dependencies:
     buffer-crc32 "~0.2.1"
 
-domelementtype@1:
-  version "1.3.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/domelementtype/-/domelementtype-1.3.0.tgz#b17aed82e8ab59e52dd9c19b1756e0fc187204c2"
-
-domhandler@2.1:
-  version "2.1.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/domhandler/-/domhandler-2.1.0.tgz#d2646f5e57f6c3bab11cf6cb05d3c0acf7412594"
-  dependencies:
-    domelementtype "1"
-
-domutils@1.1:
-  version "1.1.6"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/domutils/-/domutils-1.1.6.tgz#bddc3de099b9a2efacc51c623f28f416ecc57485"
-  dependencies:
-    domelementtype "1"
-
 each-async@~0.1.2:
   version "0.1.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/each-async/-/each-async-0.1.3.tgz#b436025b08da2f86608025519e3096763dedfca3"
@@ -321,7 +280,7 @@ eventemitter2@~0.4.13:
   version "0.4.14"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/eventemitter2/-/eventemitter2-0.4.14.tgz#8f61b75cde012b2e9eb284d4545583b5643b61ab"
 
-exit@0.1.x, exit@~0.1.1:
+exit@~0.1.1:
   version "0.1.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
 
@@ -352,10 +311,6 @@ fresh@0.2.0:
   version "0.2.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/fresh/-/fresh-0.2.0.tgz#bfd9402cf3df12c4a4c310c79f99a3dde13d34a7"
 
-fs.realpath@^1.0.0:
-  version "1.0.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
-
 gaze@~0.5.1:
   version "0.5.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/gaze/-/gaze-0.5.2.tgz#40b709537d24d1d45767db5a908689dfe69ac44f"
@@ -365,17 +320,6 @@ gaze@~0.5.1:
 getobject@~0.1.0:
   version "0.1.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/getobject/-/getobject-0.1.0.tgz#047a449789fa160d018f5486ed91320b6ec7885c"
-
-"glob@>= 3.1.4":
-  version "7.1.2"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.4"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
 
 glob@~3.1.21:
   version "3.1.21"
@@ -484,13 +428,6 @@ grunt-contrib-htmlmin@~0.2.0:
     each-async "~0.1.2"
     html-minifier "~0.5.0"
     pretty-bytes "~0.1.0"
-
-grunt-contrib-jshint@~0.9.2:
-  version "0.9.2"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/grunt-contrib-jshint/-/grunt-contrib-jshint-0.9.2.tgz#d6301597bcc3611e95f5f35ff582a7b3d73d20fb"
-  dependencies:
-    hooker "~0.2.3"
-    jshint "~2.4.0"
 
 grunt-contrib-uglify@~0.4.0:
   version "0.4.1"
@@ -606,25 +543,9 @@ html-minifier@~0.5.0:
   version "0.5.6"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/html-minifier/-/html-minifier-0.5.6.tgz#0f15b437c27b5ce9aa84a44ca2850880e9257996"
 
-htmlparser2@3.3.x:
-  version "3.3.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/htmlparser2/-/htmlparser2-3.3.0.tgz#cc70d05a59f6542e43f0e685c982e14c924a9efe"
-  dependencies:
-    domelementtype "1"
-    domhandler "2.1"
-    domutils "1.1"
-    readable-stream "1.0"
-
 iconv-lite@~0.2.11:
   version "0.2.11"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/iconv-lite/-/iconv-lite-0.2.11.tgz#1ce60a3a57864a292d1321ff4609ca4bb965adc8"
-
-inflight@^1.0.4:
-  version "1.0.6"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
-  dependencies:
-    once "^1.3.0"
-    wrappy "1"
 
 inherits@1:
   version "1.0.2"
@@ -692,25 +613,6 @@ jsdoc@^3.3.2:
     strip-json-comments "~2.0.1"
     taffydb "2.6.2"
     underscore "~1.8.3"
-
-jshint-stylish@~0.1.5:
-  version "0.1.5"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/jshint-stylish/-/jshint-stylish-0.1.5.tgz#d41b6eef8e06a4ddfb36540bf6593fe31b987236"
-  dependencies:
-    chalk "~0.4.0"
-    text-table "~0.2.0"
-
-jshint@~2.4.0:
-  version "2.4.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/jshint/-/jshint-2.4.4.tgz#4162238314c649f987752651e8e064e30a68706e"
-  dependencies:
-    cli "0.4.x"
-    console-browserify "0.1.x"
-    exit "0.1.x"
-    htmlparser2 "3.3.x"
-    minimatch "0.x.x"
-    shelljs "0.1.x"
-    underscore "1.4.x"
 
 jsonify@~0.0.0:
   version "0.0.0"
@@ -804,19 +706,6 @@ minimatch@0.3:
     lru-cache "2"
     sigmund "~1.0.0"
 
-minimatch@0.x.x:
-  version "0.4.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/minimatch/-/minimatch-0.4.0.tgz#bd2c7d060d2c8c8fd7cde7f1f2ed2d5b270fdb1b"
-  dependencies:
-    lru-cache "2"
-    sigmund "~1.0.0"
-
-minimatch@^3.0.4:
-  version "3.0.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
-  dependencies:
-    brace-expansion "^1.1.7"
-
 minimatch@~0.2.11, minimatch@~0.2.12, minimatch@~0.2.14:
   version "0.2.14"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/minimatch/-/minimatch-0.2.14.tgz#c74e780574f63c6f9a090e90efbe6ef53a6a756a"
@@ -890,12 +779,6 @@ object-keys@~0.4.0:
   version "0.4.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/object-keys/-/object-keys-0.4.0.tgz#28a6aae7428dd2c3a92f3d95f21335dd204e0336"
 
-once@^1.3.0:
-  version "1.4.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
-  dependencies:
-    wrappy "1"
-
 once@~1.3.0:
   version "1.3.3"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/once/-/once-1.3.3.tgz#b2e261557ce4c314ec8304f3fa82663e4297ca20"
@@ -923,10 +806,6 @@ pad-stdio@^0.1.0:
   dependencies:
     lpad "^0.2.0"
 
-path-is-absolute@^1.0.0:
-  version "1.0.1"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
-
 pause@0.0.1:
   version "0.0.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
@@ -937,9 +816,10 @@ portscanner@0.2.2:
   dependencies:
     async "0.1.15"
 
-prettier@^1.10.2:
-  version "1.10.2"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/prettier/-/prettier-1.10.2.tgz#1af8356d1842276a99a5b5529c82dd9e9ad3cc93"
+prettier@^1.15.3:
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.3.tgz#1feaac5bdd181237b54dbe65d874e02a1472786a"
+  integrity sha512-gAU9AGAPMaKb3NNSUUuhhFAS7SCO4ALTN4nRIn6PJ075Qd28Yn2Ig2ahEJWdJwJmlEBTUfC7mMUSFy8MwsOCfg==
 
 pretty-bytes@^0.1.0, pretty-bytes@~0.1.0:
   version "0.1.2"
@@ -979,15 +859,6 @@ raw-body@1.1.3:
   dependencies:
     bytes "~0.2.1"
 
-readable-stream@1.0, readable-stream@~1.0.17, readable-stream@~1.0.2, readable-stream@~1.0.24, readable-stream@~1.0.26, readable-stream@~1.0.26-4:
-  version "1.0.34"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
-  dependencies:
-    core-util-is "~1.0.0"
-    inherits "~2.0.1"
-    isarray "0.0.1"
-    string_decoder "~0.10.x"
-
 readable-stream@^2.2.2:
   version "2.3.4"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/readable-stream/-/readable-stream-2.3.4.tgz#c946c3f47fa7d8eabc0b6150f4a12f69a4574071"
@@ -999,6 +870,15 @@ readable-stream@^2.2.2:
     safe-buffer "~5.1.1"
     string_decoder "~1.0.3"
     util-deprecate "~1.0.1"
+
+readable-stream@~1.0.17, readable-stream@~1.0.2, readable-stream@~1.0.24, readable-stream@~1.0.26, readable-stream@~1.0.26-4:
+  version "1.0.34"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "0.0.1"
+    string_decoder "~0.10.x"
 
 readable-stream@~1.1.8, readable-stream@~1.1.9:
   version "1.1.14"
@@ -1049,10 +929,6 @@ send@0.1.4:
     fresh "0.2.0"
     mime "~1.2.9"
     range-parser "0.0.4"
-
-shelljs@0.1.x:
-  version "0.1.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/shelljs/-/shelljs-0.1.4.tgz#dfbbe78d56c3c0168d2fb79e10ecd1dbcb07ec0e"
 
 sigmund@~1.0.0:
   version "1.0.1"
@@ -1116,7 +992,7 @@ tar-stream@~0.3.0:
     end-of-stream "~0.1.3"
     readable-stream "~1.0.26-4"
 
-text-table@^0.2.0, text-table@~0.2.0:
+text-table@^0.2.0:
   version "0.2.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
@@ -1184,10 +1060,6 @@ underscore.string@~2.3.3:
 underscore.string@~2.4.0:
   version "2.4.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/underscore.string/-/underscore.string-2.4.0.tgz#8cdd8fbac4e2d2ea1e7e2e8097c42f442280f85b"
-
-underscore@1.4.x:
-  version "1.4.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/underscore/-/underscore-1.4.4.tgz#61a6a32010622afa07963bf325203cf12239d604"
 
 underscore@1.6.0, underscore@~1.6.0:
   version "1.6.0"

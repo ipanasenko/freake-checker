@@ -89,14 +89,6 @@ module.exports = function(grunt) {
       },
     },
 
-    // Make sure code styles are up to par and there are no obvious mistakes
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish'),
-      },
-      all: ['Gruntfile.js', '<%= config.app %>/scripts/{,*/}*.js', '!<%= config.app %>/scripts/vendor/*'],
-    },
     mocha: {
       all: {
         options: {
@@ -272,12 +264,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('debug', function() {
-    grunt.task.run([
-      //'jshint',
-      'concurrent:chrome',
-      'connect:chrome',
-      'watch',
-    ]);
+    grunt.task.run(['concurrent:chrome', 'connect:chrome', 'watch']);
   });
 
   grunt.registerTask('build', [
@@ -296,8 +283,5 @@ module.exports = function(grunt) {
     grunt.task.run(['bump:' + (version || 'patch') + ':bump-only', 'build', 'bump-commit']);
   });
 
-  grunt.registerTask('default', [
-    //'jshint',
-    'build',
-  ]);
+  grunt.registerTask('default', ['build']);
 };

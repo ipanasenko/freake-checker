@@ -9,12 +9,15 @@
   },
   "default_locale": "en",
   "background": {
-    "scripts": [
-      "scripts/jquery-2.1.1.min.js",
-      "scripts/defaultSettings.js",
-      "scripts/background.js"
-    ]
+    "scripts": ["scripts/jquery-2.1.1.min.js", "scripts/defaultSettings.js", "scripts/background.js"]
   },
+  "content_scripts": [
+    {
+      "matches": ["*://freake.ru/*"],
+      "exclude_matches": ["*://freake.ru/favorites*"],
+      "js": ["scripts/contentScript.js"]
+    }
+  ],
   "browser_action": {
     "default_icon": {
       "19": "images/icon-19.png",
@@ -23,12 +26,6 @@
     "default_title": "freake checker",
     "default_popup": "popup.html"
   },
-  "permissions": [
-    "http://www.freake.ru/",
-    "http://freake.ru/",
-    "storage",
-    "unlimitedStorage",
-    "alarms"
-  ],
+  "permissions": ["http://www.freake.ru/", "http://freake.ru/", "storage", "unlimitedStorage", "alarms"],
   "options_page": "options.html"
 }
