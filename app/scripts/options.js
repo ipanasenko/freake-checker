@@ -2,24 +2,26 @@
 /* global defaultSettings */
 /* global chrome */
 /* global jQuery */
-var bg = chrome.extension.getBackgroundPage(),
-  changesHaveBeenMade = false;
+const bg = chrome.extension.getBackgroundPage();
+let changesHaveBeenMade = false;
 
-var parseSettingsFromPage = function() {
-  var form = jQuery('#form-music-filter'),
-    selectedStyles = form.find('option:checked').map(function() {
-      return +this.value;
-    }),
-    minVotes = +jQuery('#minVotes').val();
+const parseSettingsFromPage = function() {
+  const form = jQuery('#form-music-filter');
+  const selectedStyles = form.find('option:checked').map(function() {
+    return Number(this.value);
+  });
+  const minVotes = Number(jQuery('#minVotes').val());
+  const perPage = Number(jQuery('#perPage').val());
 
   return {
     styles: Array.prototype.slice.call(selectedStyles),
-    minVotes: minVotes,
+    minVotes,
+    perPage,
   };
 };
 
-var tId;
-var saveSettings = function() {
+let tId;
+const saveSettings = function() {
   chrome.storage.local.set(parseSettingsFromPage(), function() {
     changesHaveBeenMade = true;
     jQuery('#status').html('Saved');
@@ -31,11 +33,12 @@ var saveSettings = function() {
   });
 };
 
-var restoreSettings = function() {
-  var def = jQuery.Deferred();
+const restoreSettings = function() {
+  const def = jQuery.Deferred();
 
   chrome.storage.local.get(defaultSettings, function(settings) {
     jQuery('#minVotes').val(settings.minVotes);
+    jQuery('#perPage').val(settings.perPage);
     settings.styles.forEach(function(style) {
       jQuery('option[value="' + style + '"]').prop('selected', true);
     });
@@ -55,7 +58,7 @@ window.onunload = function() {
 jQuery.get(freake).done(function(data) {
   data = jQuery(data);
 
-  var form = data.find('#form-music-filter');
+  const form = data.find('#form-music-filter');
 
   form
     .find('select')
@@ -70,6 +73,10 @@ jQuery.get(freake).done(function(data) {
 
   restoreSettings().done(function() {
     jQuery('#minVotes').change(function() {
+      saveSettings();
+    });
+
+    jQuery('#perPage').change(function() {
       saveSettings();
     });
 

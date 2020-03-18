@@ -1,24 +1,22 @@
 'use strict';
 
-var bg = chrome.extension.getBackgroundPage();
-var musicContainer = jQuery('#music-container');
+const bg = chrome.extension.getBackgroundPage();
+const musicContainer = jQuery('#music-container');
+
+const createRegexp = function(t, options) {
+  t = t.replace(/[()\[\]\.^$|?+]/g, '\\$&');
+  return new RegExp(t, options);
+};
 
 bg.loadSettings().done(function(settings) {
-  var insertDataInTemplate = (function() {
-    var createRegexp = function(t, options) {
-      t = t.replace(/[()\[\]\.^$|?+]/g, '\\$&');
-      return new RegExp(t, options);
-    };
+  const insertDataInTemplate = function(template, data) {
+    jQuery.each(data, function(key, value) {
+      template = template.replace(createRegexp('#' + key + '#', 'gi'), value);
+    });
+    return template;
+  };
 
-    return function(template, data) {
-      jQuery.each(data, function(key, value) {
-        template = template.replace(createRegexp('#' + key + '#', 'gi'), value);
-      });
-      return template;
-    };
-  })();
-
-  var template = `
+  const template = `
     <div class="music-small clearfix" data-release-id="#id#">
       <div class="ms-image">
         <a href="${freake}/#id#">
@@ -44,7 +42,7 @@ bg.loadSettings().done(function(settings) {
     </div>
 	`;
 
-  var loadReleases = function(releases) {
+  const loadReleases = function(releases) {
     releases = releases || bg.releases;
 
     if (!releases) {
@@ -54,7 +52,7 @@ bg.loadSettings().done(function(settings) {
 
     musicContainer.empty();
 
-    var sorted = [];
+    let sorted = [];
     jQuery.each(releases, function() {
       if (this.viewed) {
         return;
@@ -66,8 +64,8 @@ bg.loadSettings().done(function(settings) {
       return parseFloat(b.votes) - parseFloat(a.votes);
     });
 
-    jQuery.each(sorted.slice(0, 10), function(i, releaseData) {
-      var music = jQuery(insertDataInTemplate(template, releaseData));
+    jQuery.each(sorted.slice(0, settings.perPage), function(i, releaseData) {
+      const music = jQuery(insertDataInTemplate(template, releaseData));
 
       musicContainer.append(music);
     });
@@ -79,7 +77,7 @@ bg.loadSettings().done(function(settings) {
     loadReleases(request.releases);
   });
 
-  var setReleaseAsViewed = function(settings, id, doSave) {
+  const setReleaseAsViewed = function(settings, id, doSave) {
     settings.releases[id] = {
       viewed: true,
     };
@@ -99,15 +97,15 @@ bg.loadSettings().done(function(settings) {
       });
     })
     .on('click', '.music-small button', function() {
-      var musicWrapper = jQuery(this).closest('.music-small');
-      var id = musicWrapper.data('release-id');
+      const musicWrapper = jQuery(this).closest('.music-small');
+      const id = musicWrapper.data('release-id');
 
       setReleaseAsViewed(settings, id, true);
       musicWrapper.remove();
     })
     .on('click', '#markAll', function() {
       jQuery('.music-small').each(function() {
-        var id = jQuery(this).data('release-id');
+        const id = jQuery(this).data('release-id');
 
         setReleaseAsViewed(settings, id, false);
       });
@@ -117,7 +115,7 @@ bg.loadSettings().done(function(settings) {
     })
     .on('click', '#openAll', function() {
       jQuery('.music-small').each(function() {
-        var url = jQuery(this)
+        const url = jQuery(this)
           .find('a')
           .attr('href');
 
